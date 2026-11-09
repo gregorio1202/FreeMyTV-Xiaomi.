@@ -1,0 +1,36 @@
+# Android build products
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.aar
+*.so
+/build/
+/app/build/
+/out/
+/.gradle/
+.gradle/
+.local.properties
+local.properties
+
+# Signing credentials and secrets
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+.env
+.env.*
+!.env.example
+*subscription*.txt
+*vless*secret*
+*credentials*.json
+
+# Editor and system files
+.DS_Store
+.idea/
+.vscode/
+*.swp
