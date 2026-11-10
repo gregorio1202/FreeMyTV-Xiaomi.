@@ -1,0 +1,25 @@
+name: Free My TV source checks
+on:
+  push:
+    branches: [feature/full-tv-vpn]
+  pull_request:
+    branches: [main]
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Compile and test network-speed indicator
+        shell: bash
+        run: |
+          mkdir -p /tmp/freemytv-test-classes
+          javac -encoding UTF-8 -d /tmp/freemytv-test-classes \
+            tests/stubs/android/os/SystemClock.java \
+            tests/stubs/android/net/TrafficStats.java \
+            app/src/io/freemytv/NetworkTrafficMeter.java \
+            tests/io/freemytv/NetworkTrafficMeterTest.java
+          java -cp /tmp/freemytv-test-classes io.freemytv.NetworkTrafficMeterTest
