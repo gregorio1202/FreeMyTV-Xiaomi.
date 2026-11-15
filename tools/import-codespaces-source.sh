@@ -47,6 +47,9 @@ for rel in allowed:
         shutil.copyfile(p, target)
         copied.append(target)
 for p in copied:
+    # These two tests contain deliberate fake VLESS URLs and URL credentials.
+    if p.name in {"VlessSubscriptionTest.java", "VlessSubscriptionLoaderTest.java"}:
+        continue
     if p.suffix.lower() not in {".java", ".xml", ".json", ".sh", ".md", ".properties", ".txt", ".yml", ".yaml"}:
         continue
     data = p.read_text(encoding="utf-8", errors="replace")
