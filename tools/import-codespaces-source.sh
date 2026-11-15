@@ -61,6 +61,15 @@ for p in copied:
     ]
     if any(re.search(pattern, data) for pattern in checks):
         raise SystemExit("ERROR: possible credential in " + str(p.relative_to(dst)) + "; nothing published")
+# Preserve the agreed dark theme in both generic and configured builds.
+build = dst / "build.sh"
+build_text = build.read_text(encoding="utf-8")
+if 'prop theme auto' in build_text:
+    build.write_text(build_text.replace('prop theme auto', 'prop theme dark'), encoding="utf-8")
+example = dst / "config.example.properties"
+if example.exists():
+    config_text = example.read_text(encoding="utf-8")
+    example.write_text(config_text.replace('theme=auto', 'theme=dark'), encoding="utf-8")
 print("Safe source files copied:", len(copied))
 PY
 
