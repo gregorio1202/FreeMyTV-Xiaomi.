@@ -1,0 +1,33 @@
+name: Build Free My TV preview APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/full-tv-vpn]
+    paths:
+      - 'app/**'
+      - 'build.sh'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK
+        run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
+      - name: Build test-signed APK
+        run: bash build.sh --generic
+      - name: Verify APK signature
+        run: |
+          "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose FreeMyTV.apk
+          "$ANDROID_HOME/build-tools/34.0.0/aapt2" dump badging FreeMyTV.apk | head -12
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FreeMyTV-preview-APK
+          path: FreeMyTV.apk
+          retention-days: 14
